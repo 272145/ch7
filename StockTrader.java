@@ -1,3 +1,10 @@
+//1.moving average did best on most files
+//2.rising, due to it did not dip
+//3.in apple, the moving average did better than buy and hold due to the big drop in apple's stock
+//4. my strategy, which is a 3 month average comparison is doing better than buy and hold in most strategies, as it does better when the price drops
+
+
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -6,7 +13,7 @@ import java.util.Scanner;
 public class StockTrader {
 
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner in = new Scanner(new File("tiny.txt"));
+        Scanner in = new Scanner(new File("aapl_2000_2010.txt"));
         String symbol = in.next();
         int n = in.nextInt();
 
@@ -106,7 +113,11 @@ public class StockTrader {
 		return cash + shares * prices[prices.length - 1];
 	}
 	public static String decide(double[] history, boolean holding, double boughtAt) {
-		return dipBuyer(history, holding, boughtAt);   
+		//return dipBuyer(history, holding, boughtAt); 
+		//return movingAverage(history, holding, boughtAt);
+		//return myStrategy(history, holding,boughtAt);
+		return buyAndHold(history, holding,boughtAt);
+		  
 	}
 	public static String buyAndHold(double[] history, boolean holding, double boughtAt){
 		return "BUY";
@@ -148,8 +159,21 @@ public class StockTrader {
 		 }
 		 return "HOLD";
 	}
+	public static String myStrategy(double[] history, boolean holding, double boughtAt){
+		int n = history.length;
+		if(n<3){
+			return "HOLD";
+		}
+		double today = history[n-1];
+		double average = (today+history[n-2] + history[n-3]) /3.0;
+		if(!holding&& today>average){
+			return "BUY";
+		}
+		if(holding&& today<average){
+			return "SELL";
+		}
+		return "HOLD";
+	}
 	
 }
 	
-    
-
